@@ -4,18 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.mcmodersd</groupId>
+    <groupId>de.MCmoderSD</groupId>
     <artifactId>jal</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <version>1.0.1</version>
 
     <name>Java Audio Library</name>
     <description>A simple Java audio library</description>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
+        <gpg.skip>true</gpg.skip>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
+        </repository>
+    </repositories>
 
 </project>

@@ -1,4 +1,4 @@
-package de.mcmodersd.jal;
+package de.MCmoderSD.jal;
 
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
