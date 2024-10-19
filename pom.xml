@@ -6,7 +6,7 @@
 
     <groupId>de.MCmoderSD</groupId>
     <artifactId>jal</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>Java Audio Library</name>
     <description>A simple Java audio library</description>
@@ -32,5 +32,4 @@
             <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
         </repository>
     </repositories>
-
 </project>

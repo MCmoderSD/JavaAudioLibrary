@@ -1,6 +1,14 @@
 package de.MCmoderSD.jal;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.LineUnavailableException;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
