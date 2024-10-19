@@ -17,5 +17,5 @@ A simple Java audio library for recording and playing audio files.
 <dependency>
     <groupId>de.MCmoderSD</groupId>
     <artifactId>jal</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
