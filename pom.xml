@@ -13,7 +13,7 @@
 
     <distributionManagement>
         <repository>
-            <id>OpenAI-Utility</id>
+            <id>JavaAudioLibrary</id>
             <name>GitHub MCmoderSD Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
         </repository>
@@ -28,7 +28,7 @@
 
     <repositories>
         <repository>
-            <id>OpenAI-Utility</id>
+            <id>JavaAudioLibrary</id>
             <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
         </repository>
     </repositories>

@@ -3,7 +3,7 @@
 ## Description
 A simple Java audio library for recording and playing audio files.
 
-## Installation
+## Usage
 
 ### Maven
 ```xml
