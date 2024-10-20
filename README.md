@@ -7,18 +7,11 @@ A simple Java audio library for recording and playing audio files.
 
 ### Maven
 ```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>de.MCmoderSD</groupId>
         <artifactId>jal</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 </dependencies>
 ```
