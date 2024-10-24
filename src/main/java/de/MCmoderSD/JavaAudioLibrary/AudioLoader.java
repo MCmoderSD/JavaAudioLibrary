@@ -2,10 +2,12 @@ package de.MCmoderSD.JavaAudioLibrary;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -64,12 +66,11 @@ public class AudioLoader {
     }
 
     /**
-     * Loads an {@code AudioFile} based on the given path and its type (absolute or relative).
+     * Loads an {@code AudioFile} from the specified path.
      *
-     * @param path       the path to the audio file.
-     * @param isAbsolute whether the path is absolute.
+     * @param path the path of the audio file.
      * @return the loaded {@code AudioFile}.
-     * @throws IOException          if the file path is invalid, the file does not exist, or the format is unsupported.
+     * @throws IOException          if the file could not be loaded or is of an unsupported format.
      * @throws URISyntaxException   if the path is an invalid URI.
      */
     public static AudioFile loadAudio(String path, boolean isAbsolute) throws IOException, URISyntaxException {
@@ -87,11 +88,8 @@ public class AudioLoader {
             File file = new File(path);
             if (!file.exists()) throw new IOException("AudioFile not found: " + path);
             return new AudioFile(Files.readAllBytes(file.toPath()));
-        } else if (path.startsWith("http://") || path.startsWith("https://")) {
-            return new AudioFile(Files.readAllBytes(Paths.get(new URI(path))));
-        } else {
-            return new AudioFile(Objects.requireNonNull(AudioLoader.class.getResourceAsStream(path)).readAllBytes());
-        }
+        } else if (path.startsWith("http://") || path.startsWith("https://")) return new AudioFile(new URI(path).toURL().openStream().readAllBytes());
+        else return new AudioFile(Objects.requireNonNull(AudioLoader.class.getResourceAsStream(path)).readAllBytes());
     }
 
     /**
@@ -176,11 +174,7 @@ public class AudioLoader {
      * @return the path of the {@code AudioFile}, or {@code null} if it is not in the cache.
      */
     public String get(AudioFile audioFile) {
-        if (contains(audioFile)) {
-            for (String key : cache.keySet()) {
-                if (cache.get(key).equals(audioFile)) return key;
-            }
-        }
+        if (contains(audioFile)) for (String key : cache.keySet()) if (cache.get(key).equals(audioFile)) return key;
         return null;
     }
 

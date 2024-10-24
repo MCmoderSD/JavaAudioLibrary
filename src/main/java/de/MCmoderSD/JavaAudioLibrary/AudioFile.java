@@ -222,27 +222,35 @@ public class AudioFile {
         return audioData.length / audioFormat.getFrameSize() / audioFormat.getFrameRate();
     }
 
+    /**
+     * Exports the audio data to a WAV file at the specified file path.
+     *
+     * @param filePath the path to export the audio file to
+     * @return the exported WAV file
+     * @throws IOException if an I/O error occurs
+     */
+    public File export(String filePath) throws IOException {
 
-    public File export(String filePath) {
+        // Check path
+        if (filePath == null || filePath.isEmpty() || filePath.isBlank()) throw new IOException("File path is invalid!");
 
-        // Check if audio data and format are valid
-        if (audioData == null || audioFormat == null) return null;
-        if (!filePath.endsWith(".wav")) {
-            System.err.println("Error exporting audio: File must be in WAV format!");
-            return null;
-        };
+        // Check extension
+        if (!filePath.endsWith(".wav")) throw new IOException("File extension is not supported: " + filePath);
 
-        // Export audio to WAV file
-        try {
-            File wavFile = new File(filePath);
-            ByteArrayInputStream exportStream = new ByteArrayInputStream(audioData);
-            AudioInputStream exportAudioStream = new AudioInputStream(exportStream, audioFormat, audioData.length / audioFormat.getFrameSize());
-            AudioSystem.write(exportAudioStream, AudioFileFormat.Type.WAVE, wavFile);
-            exportAudioStream.close();
-            return wavFile;
-        } catch (IOException e) {
-            System.err.println("Error exporting audio to WAV: " + e.getMessage());
-            return null;
-        }
+        // Check format
+        if (audioFormat == null) throw new IOException("Audio format is null!");
+
+        // Check if audio data is empty
+        if (audioData == null || audioData.length == 0) throw new IOException("Audio data is empty!");
+
+        // Create WAV file
+        File wavFile = new File(filePath);
+
+        // Export audio
+        ByteArrayInputStream exportStream = new ByteArrayInputStream(audioData);
+        AudioInputStream exportAudioStream = new AudioInputStream(exportStream, audioFormat, audioData.length / audioFormat.getFrameSize());
+        AudioSystem.write(exportAudioStream, AudioFileFormat.Type.WAVE, wavFile);
+        exportAudioStream.close();
+        return wavFile;
     }
 }

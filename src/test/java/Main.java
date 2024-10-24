@@ -2,6 +2,10 @@ import de.MCmoderSD.JavaAudioLibrary.AudioFile;
 import de.MCmoderSD.JavaAudioLibrary.AudioLoader;
 import de.MCmoderSD.JavaAudioLibrary.AudioRecorder;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -38,50 +42,49 @@ public class Main {
         AudioFile audioFile = audioRecorder.getAudioFile();
 
         // Export audio
-        audioFile.export("output.wav");
+        try {
+            audioFile.export("output.wav");
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     public static void loadAudio() {
 
-        // Audio Loader
+        // Initialize audio loader
         AudioLoader audioLoader = new AudioLoader();
+        AudioFile absolutePath = null;
+        AudioFile resourcesPath = null;
+        AudioFile url = null;
 
-        System.out.println("Loading audio from Resources...");
-
-        // Load audio file from Absolute Path
         try {
-            AudioFile audioFile = audioLoader.load("output.wav", true);
-            audioFile.play();
-            System.out.println("Press enter to play next");
-            scanner.nextLine();
-        } catch (Exception e) {
-            System.err.println("Error loading audio file: " + e.getMessage());
+
+            // Load audio from absolute path
+            absolutePath = audioLoader.load("output.wav", true);
+            System.out.println("Loaded audio from absolute path: " + absolutePath);
+
+            // Load audio from resources path
+            resourcesPath = audioLoader.load("/Eating.wav");
+            System.out.println("Loaded audio from resources path: " + resourcesPath);
+
+            // Load audio from URL
+            url = audioLoader.load("https://raw.githubusercontent.com/MCmoderSD/JavaAudioLibrary/refs/heads/master/src/test/resources/Eating.wav");
+            System.out.println("Loaded audio from URL: " + url);
+
+        } catch (IOException | URISyntaxException e) {
+            System.err.println("Error: " + e.getMessage());
         }
 
-        System.out.println("Loading audio from Resources...");
+        // Debug
+        System.out.println("Finished loading audio.");
+        System.out.println("Press enter to listen to the audio...");
+        scanner.nextLine();
 
-        // Load audio file from Resources
-        try {
-            AudioFile audioFile = audioLoader.load("/Eating.wav");
-            audioFile.play();
-            System.out.println("Press enter to play next");
-            scanner.nextLine();
-        } catch (Exception e) {
-            System.err.println("Error loading audio file: " + e.getMessage());
-        }
-
-        System.out.println("Loading audio from URL...");
-
-        // Load audio file from URL
-        try {
-            AudioFile audioFile = audioLoader.load("https://raw.githubusercontent.com/MCmoderSD/ImageLoader/refs/heads/master/src/test/resources/Eating.wav");
-            audioFile.play();
-            System.out.println("Press enter to play next");
-            scanner.nextLine();
-        } catch (Exception e) {
-            System.err.println("Error loading audio file: " + e.getMessage());
-        }
-
-        System.out.println("Loaded all audio files.");
+        // Play audio
+        Objects.requireNonNull(absolutePath).play();
+        scanner.nextLine(); // Wait for input
+        Objects.requireNonNull(resourcesPath).play();
+        scanner.nextLine(); // Wait for input
+        Objects.requireNonNull(url).play();
     }
 }
