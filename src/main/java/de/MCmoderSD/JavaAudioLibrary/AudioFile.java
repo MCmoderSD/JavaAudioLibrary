@@ -222,13 +222,17 @@ public class AudioFile {
         return audioData.length / audioFormat.getFrameSize() / audioFormat.getFrameRate();
     }
 
-    /**
-     * Exports the audio data to a WAV file.
-     *
-     * @param filePath the file path where the WAV file will be saved
-     * @return the {@link File} object representing the exported WAV file, or {@code null} if an error occurs
-     */
-    public File exportToWav(String filePath) {
+
+    public File export(String filePath) {
+
+        // Check if audio data and format are valid
+        if (audioData == null || audioFormat == null) return null;
+        if (!filePath.endsWith(".wav")) {
+            System.err.println("Error exporting audio: File must be in WAV format!");
+            return null;
+        };
+
+        // Export audio to WAV file
         try {
             File wavFile = new File(filePath);
             ByteArrayInputStream exportStream = new ByteArrayInputStream(audioData);

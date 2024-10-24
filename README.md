@@ -51,7 +51,7 @@ public class Main {
         AudioFile audioFile = audioRecorder.getAudioFile();
 
         // Export audio file
-        audioFile.exportToWav("audio.wav");
+        audioFile.export("audio.wav");
 
         // Play audio file
         audioFile.play();

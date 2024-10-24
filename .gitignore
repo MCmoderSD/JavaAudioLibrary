@@ -4,6 +4,8 @@ target/
 !**/src/test/**/target/
 .idea
 docs/
+out/
+output.wav
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

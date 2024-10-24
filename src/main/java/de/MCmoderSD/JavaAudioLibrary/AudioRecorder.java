@@ -38,9 +38,9 @@ public class AudioRecorder {
     public AudioRecorder() {
 
         // Audio format
-        float sampleRate = 48000;
-        int sampleSizeInBits = 16;
-        int channels = 1; // Mono
+        var sampleRate = 48000f;
+        var sampleSizeInBits = 16;
+        var channels = 1; // Mono
         boolean signed = true;
         boolean bigEndian = false;
 
