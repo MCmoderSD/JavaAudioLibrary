@@ -1,4 +1,4 @@
-package de.MCmoderSD.jal;
+package de.MCmoderSD.JavaAudioLibrary;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -13,6 +13,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The {@code AudioFile} class provides methods to manage, play, pause, and export audio data.
+ * It supports playback from a byte array and allows exporting the audio to a WAV file.
+ */
 @SuppressWarnings({"ALL"})
 public class AudioFile {
 
@@ -26,7 +30,11 @@ public class AudioFile {
     private DataLine.Info info;
     private SourceDataLine audioLine;
 
-    // Byte array constructor
+    /**
+     * Constructs an {@code AudioFile} object with the specified byte array.
+     *
+     * @param audioData the byte array containing audio data
+     */
     public AudioFile(byte[] audioData) {
 
         // Set audio data
@@ -37,7 +45,12 @@ public class AudioFile {
         initializeAudio();
     }
 
-    // Byte array constructor with audio format
+    /**
+     * Constructs an {@code AudioFile} object with the specified byte array and audio format.
+     *
+     * @param audioData the byte array containing audio data
+     * @param format the format of the audio data
+     */
     public AudioFile(byte[] audioData, AudioFormat format) {
 
         // Set audio data
@@ -50,10 +63,11 @@ public class AudioFile {
         initializeAudio();
     }
 
-    // Initialize audio components
+    /**
+     * Initializes the audio components, such as the {@link AudioInputStream} and the {@link SourceDataLine}.
+     */
     private void initializeAudio() {
         try {
-
             // Check if audio format is null
             if (audioFormat == null) {
                 audioInputStream = AudioSystem.getAudioInputStream(byteArrayInputStream);
@@ -77,7 +91,9 @@ public class AudioFile {
         }
     }
 
-    // Play audio
+    /**
+     * Plays the audio in a separate thread.
+     */
     public void play() {
         if (audioLine == null) return;
         new Thread(() -> {
@@ -102,18 +118,30 @@ public class AudioFile {
         }).start();
     }
 
+    /**
+     * Pauses the audio playback by stopping the audio line.
+     */
     public void pause() {
         if (audioLine != null) audioLine.stop();
     }
 
+    /**
+     * Resumes the audio playback by starting the audio line.
+     */
     public void resume() {
         if (audioLine != null) audioLine.start();
     }
 
+    /**
+     * Closes the audio line, releasing any system resources.
+     */
     public void close() {
         if (audioLine != null) audioLine.close();
     }
 
+    /**
+     * Resets the audio input stream to the beginning of the audio data.
+     */
     public void reset() {
         try {
             if (audioInputStream != null) audioInputStream.reset();
@@ -122,39 +150,84 @@ public class AudioFile {
         }
     }
 
-    // Getter
+    /**
+     * Returns the raw audio data as a byte array.
+     *
+     * @return the audio data
+     */
     public byte[] getAudioData() {
         return audioData;
     }
 
+    /**
+     * Returns the {@link ByteArrayInputStream} used for the audio data.
+     *
+     * @return the byte array input stream
+     */
     public ByteArrayInputStream getByteArrayInputStream() {
         return byteArrayInputStream;
     }
 
+    /**
+     * Returns the {@link AudioInputStream} for the audio data.
+     *
+     * @return the audio input stream
+     */
     public AudioInputStream getAudioInputStream() {
         return audioInputStream;
     }
 
+    /**
+     * Returns the {@link AudioFormat} for the audio data.
+     *
+     * @return the audio format
+     */
     public AudioFormat getAudioFormat() {
         return audioFormat;
     }
 
+    /**
+     * Returns the {@link DataLine.Info} for the audio line.
+     *
+     * @return the audio line info
+     */
     public DataLine.Info getInfo() {
         return info;
     }
 
+    /**
+     * Returns the {@link SourceDataLine} used to play the audio.
+     *
+     * @return the source data line
+     */
     public SourceDataLine getAudioLine() {
         return audioLine;
     }
 
+    /**
+     * Returns the size of the audio data in bytes.
+     *
+     * @return the size of the audio data
+     */
     public int getSize() {
         return audioData.length;
     }
 
+    /**
+     * Returns the duration of the audio in seconds.
+     *
+     * @return the duration of the audio
+     */
     public float getDuration() {
         return audioData.length / audioFormat.getFrameSize() / audioFormat.getFrameRate();
     }
 
+    /**
+     * Exports the audio data to a WAV file.
+     *
+     * @param filePath the file path where the WAV file will be saved
+     * @return the {@link File} object representing the exported WAV file, or {@code null} if an error occurs
+     */
     public File exportToWav(String filePath) {
         try {
             File wavFile = new File(filePath);
