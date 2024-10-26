@@ -3,6 +3,8 @@
 ## Description
 A simple Java audio library for recording and playing audio files.
 
+The Library currently only supports .wav files with a sample rate up to 192kHz and up to 16-bit PCM and up to 2 channels (stereo).
+
 ## Usage
 
 ### Maven
