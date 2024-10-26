@@ -7,63 +7,72 @@ import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.LineUnavailableException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+import java.net.URISyntaxException;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import java.util.HexFormat;
 
 /**
- * The {@code AudioRecorder} class provides functionality to record audio using
- * a specific audio format and retrieve the recorded data as an {@code AudioFile}.
+ * The {@code AudioRecorder} class provides functionality for recording audio
+ * from the microphone. It captures audio data in real-time and stores it
+ * in memory, allowing the user to export the recorded audio as a file.
  */
 @SuppressWarnings({"ALL"})
 public class AudioRecorder {
 
     // Attributes
     private final AudioFormat format;
+    private final DataLine.Info info;
+    private final TargetDataLine line;
 
     // Variables
-    private boolean isRecording;
-    private TargetDataLine line;
     private ByteArrayOutputStream buffer;
+    private boolean isRecording;
 
     /**
-     * Initializes a new {@code AudioRecorder} instance with a default audio format.
-     * <p>
-     * The default format is:
-     * <ul>
-     *     <li>Sample rate: 48,000 Hz</li>
-     *     <li>Sample size: 16 bits</li>
-     *     <li>Channels: Mono</li>
-     *     <li>Signed: true</li>
-     *     <li>Big-endian: false</li>
-     * </ul>
+     * Constructs an {@code AudioRecorder} instance and initializes the audio format,
+     * checks if the format is supported, and prepares the audio line for recording.
+     *
+     * @throws RuntimeException if the audio format is not supported or if an error occurs
+     *                          while initializing the audio line.
      */
     public AudioRecorder() {
 
-        // Audio format
-        var sampleRate = 48000f;
-        var sampleSizeInBits = 16;
-        var channels = 1; // Mono
-        boolean signed = true;
-        boolean bigEndian = false;
+        // Initialize audio format
+        var sampleRate = 192000f;       // 192 kHz
+        var sampleSizeInBits = 16;      // 16 bit
+        var channels = 2;               // Stereo
+        boolean signed = true;          // Signed
+        boolean bigEndian = false;      // Little-endian
 
         // Set audio format
         format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+
+        // Check supported audio format
+        info = new DataLine.Info(TargetDataLine.class, format);
+        if (!AudioSystem.isLineSupported(info)) throw new RuntimeException("Audio format not supported!");
+
+        // Get audio line
+        try {
+            line = (TargetDataLine) AudioSystem.getLine(info);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException("Error initializing audio line: " + e.getMessage());
+        }
 
         // Initialize variables
         isRecording = false;
     }
 
     /**
-     * Starts the recording process in a new thread. The recorded data will be
-     * stored in a buffer.
-     *
-     * @throws RuntimeException if the audio format is not supported by the system
+     * Starts recording audio in a separate thread. The recorded audio data
+     * is stored in a byte array output stream.
      */
     public void startRecording() {
-
-        // Check supported audio format
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        if (!AudioSystem.isLineSupported(info)) throw new RuntimeException("Audio format not supported!");
-
-        // Open recording Thread
         new Thread(() -> {
             try {
 
@@ -71,7 +80,6 @@ public class AudioRecorder {
                 isRecording = true;
 
                 // Open audio line
-                line = (TargetDataLine) AudioSystem.getLine(info);
                 line.open(format);
 
                 // Start recording
@@ -94,7 +102,8 @@ public class AudioRecorder {
     }
 
     /**
-     * Stops the recording process. If no recording is in progress, this method has no effect.
+     * Stops the audio recording. This method sets the recording flag to false,
+     * stops the audio line, and closes it to free up resources.
      */
     public void stopRecording() {
         if (isRecording && line != null) {
@@ -105,41 +114,72 @@ public class AudioRecorder {
     }
 
     /**
-     * Retrieves the recorded audio data and returns it as an {@code AudioFile}.
-     * <p>
-     * This method also stops the recording if it is still ongoing.
+     * Retrieves the recorded audio data as an {@code AudioFile} object.
+     * This method stops the recording, exports the audio data to a temporary
+     * file, loads the audio file, and then deletes the temporary file.
      *
      * @return an {@code AudioFile} containing the recorded audio data, or {@code null}
-     *         if no data was recorded
+     *         if an error occurs during the process.
      */
     public AudioFile getAudioFile() {
 
         // Stop recording
         stopRecording();
 
-        // Return audio file
-        if (buffer != null) {
-            byte[] audioData = buffer.toByteArray();
-            return new AudioFile(audioData, format);
+        try {
+
+            // Return audio file
+            if (buffer != null) {
+
+                // Get audio data
+                byte[] audioData = buffer.toByteArray();
+
+                // Get temporary file
+                String tempPath = System.getProperty("java.io.tmpdir");
+                while (tempPath.endsWith("/") || tempPath.endsWith("\\")) tempPath = tempPath.substring(0, tempPath.length() - 1);
+                File tempFile = new File(tempPath + "/" + HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(audioData)) + ".wav");
+
+                // Export audio file
+                Utility.export(tempFile, audioData, format);
+
+                // Load audio file
+                AudioFile audioFile = AudioLoader.loadAudio(tempFile.getAbsolutePath(), true);
+
+                // Delete temporary file
+                tempFile.delete();
+
+                // Return audio file
+                return audioFile;
+            }
+        } catch (IOException | URISyntaxException | NoSuchAlgorithmException e) {
+            System.err.println("Error: " + e.getMessage());
         }
         return null;
     }
 
     /**
-     * Returns the audio format used for recording.
+     * Checks if the recorder is currently in the process of recording audio.
      *
-     * @return the {@code AudioFormat} object representing the recording format
+     * @return {@code true} if the recorder is recording, {@code false} otherwise
      */
+    public boolean isRecording() {
+        return isRecording;
+    }
+
+    // Getters
     public AudioFormat getFormat() {
         return format;
     }
 
-    /**
-     * Checks if the recording is currently in progress.
-     *
-     * @return {@code true} if recording is in progress, {@code false} otherwise
-     */
-    public boolean isRecording() {
-        return isRecording;
+    public DataLine.Info getInfo() {
+        return info;
+    }
+
+    public TargetDataLine getLine() {
+        return line;
+    }
+
+    public ByteArrayOutputStream getBuffer() {
+        return buffer;
     }
 }
