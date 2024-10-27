@@ -6,7 +6,7 @@
 
     <groupId>de.MCmoderSD</groupId>
     <artifactId>jal</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <name>Java Audio Library</name>
     <description>A simple Java audio library</description>
@@ -20,18 +20,10 @@
     </distributionManagement>
 
     <properties>
-        <gpg.skip>true</gpg.skip>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>JavaAudioLibrary</id>
-            <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
