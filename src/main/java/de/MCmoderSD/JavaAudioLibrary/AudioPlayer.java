@@ -3,9 +3,9 @@ package de.MCmoderSD.JavaAudioLibrary;
 import java.util.HashMap;
 
 /**
- * The {@code AudioPlayer} class provides methods for managing and playing multiple
- * {@link AudioFile} instances. It supports playback, pausing, resuming, and stopping
- * of audio files, as well as tracking audio files by unique IDs.
+ * AudioPlayer is a utility class for managing and controlling audio playback.
+ * It allows for playing, pausing, resuming, and stopping audio files.
+ * Each audio file is assigned a unique ID for identification and control.
  */
 @SuppressWarnings("ALL")
 public class AudioPlayer {
@@ -17,21 +17,32 @@ public class AudioPlayer {
     private boolean isPaused = false;
 
     /**
-     * Plays audio data from a byte array by creating an {@link AudioFile} instance.
+     * Plays an audio file with the specified ID if it exists in the pool.
      *
-     * @param audioData the audio data as a byte array
+     * @param id the unique ID of the audio file to play
      */
-    public void play(byte[] audioData) {
-        play(new AudioFile(audioData));
+    public void play(int id) {
+        if (pool.containsKey(id)) pool.get(id).play(this, id);
     }
 
     /**
-     * Plays an {@link AudioFile} instance by adding it to the pool and starting playback.
+     * Plays audio data from a byte array, creating a new audio file instance.
      *
-     * @param audioFile the {@code AudioFile} to play
+     * @param audioData the audio data as a byte array
+     * @return the unique ID assigned to the new audio file, or {@code null} if creation fails
      */
-    public void play(AudioFile audioFile) {
-        if (audioFile == null) return;
+    public Integer play(byte[] audioData) {
+        return play(new AudioFile(audioData));
+    }
+
+    /**
+     * Plays the specified AudioFile instance.
+     *
+     * @param audioFile the AudioFile instance to play
+     * @return the unique ID assigned to the audio file, or {@code null} if the audio file is {@code null}
+     */
+    public Integer play(AudioFile audioFile) {
+        if (audioFile == null) return null;
 
         // Generate a unique ID
         var id = pool.size();
@@ -43,13 +54,15 @@ public class AudioPlayer {
         // Add the audio file to the pool
         pool.put(id, instance);
         instance.play(this, id);
+
+        // Return the ID
+        return id;
     }
 
     /**
-     * Removes the {@link AudioFile} with the specified ID from the pool,
-     * closing it if it is currently playing.
+     * Removes an audio file from the pool using the specified ID and closes the file if it exists.
      *
-     * @param id the unique identifier of the {@code AudioFile} to remove
+     * @param id the unique ID of the audio file to remove
      */
     public void remove(int id) {
         if (pool.containsKey(id)) {
@@ -59,7 +72,16 @@ public class AudioPlayer {
     }
 
     /**
-     * Pauses playback of all {@link AudioFile} instances in the pool.
+     * Pauses the audio file with the specified ID if it exists in the pool.
+     *
+     * @param id the unique ID of the audio file to pause
+     */
+    public void pause(int id) {
+        if (pool.containsKey(id)) pool.get(id).pause();
+    }
+
+    /**
+     * Pauses all audio files in the pool and sets the player to a paused state.
      */
     public void pause() {
         isPaused = true;
@@ -67,7 +89,16 @@ public class AudioPlayer {
     }
 
     /**
-     * Resumes playback of all {@link AudioFile} instances in the pool.
+     * Resumes playback of the audio file with the specified ID if it exists in the pool.
+     *
+     * @param id the unique ID of the audio file to resume
+     */
+    public void resume(int id) {
+        if (pool.containsKey(id)) pool.get(id).resume();
+    }
+
+    /**
+     * Resumes playback of all audio files in the pool and sets the player to an unpaused state.
      */
     public void resume() {
         for (AudioFile audioFile : pool.values()) audioFile.resume();
@@ -75,8 +106,7 @@ public class AudioPlayer {
     }
 
     /**
-     * Stops playback of all {@link AudioFile} instances in the pool and clears
-     * the pool.
+     * Stops all audio playback, closes each audio file, and clears the pool.
      */
     public void stop() {
         for (AudioFile audioFile : pool.values()) audioFile.close();
@@ -84,9 +114,19 @@ public class AudioPlayer {
     }
 
     /**
-     * Checks if the audio player is currently paused.
+     * Retrieves the audio file associated with the specified ID.
      *
-     * @return {@code true} if the player is paused, {@code false} otherwise
+     * @param id the unique ID of the audio file
+     * @return the AudioFile instance, or {@code null} if no audio file is found for the given ID
+     */
+    public AudioFile get(int id) {
+        return pool.get(id);
+    }
+
+    /**
+     * Checks if the player is currently paused.
+     *
+     * @return {@code true} if the player is paused; {@code false} otherwise
      */
     public boolean isPaused() {
         return isPaused;
