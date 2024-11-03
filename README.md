@@ -13,7 +13,7 @@ The Library currently only supports .wav files with a sample rate up to 192kHz a
     <dependency>
         <groupId>de.MCmoderSD</groupId>
         <artifactId>jal</artifactId>
-        <version>1.1.2</version>
+        <version>1.1.3</version>
     </dependency>
 </dependencies>
 ```

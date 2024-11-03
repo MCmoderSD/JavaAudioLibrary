@@ -26,8 +26,7 @@ public class AudioPlayer {
     }
 
     /**
-     * Plays the specified {@link AudioFile} and adds it to the internal pool
-     * with a unique identifier.
+     * Plays an {@link AudioFile} instance by adding it to the pool and starting playback.
      *
      * @param audioFile the {@code AudioFile} to play
      */
@@ -38,9 +37,12 @@ public class AudioPlayer {
         var id = pool.size();
         while (pool.containsKey(id)) id++;
 
-        // Add audioFile to pool and start playback
-        pool.put(id, audioFile);
-        audioFile.play(this, id);
+        // Copy the audio file
+        AudioFile instance = audioFile.copy();
+
+        // Add the audio file to the pool
+        pool.put(id, instance);
+        instance.play(this, id);
     }
 
     /**
