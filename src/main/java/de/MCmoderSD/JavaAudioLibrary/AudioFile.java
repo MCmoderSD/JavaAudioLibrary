@@ -34,6 +34,15 @@ public class AudioFile {
     /**
      * Constructs an {@code AudioFile} with the specified audio data.
      *
+     * @param audioFile the audio file to copy
+     */
+    public AudioFile(AudioFile audioFile) {
+        this(audioFile.audioData);
+    }
+
+    /**
+     * Constructs an {@code AudioFile} with the specified audio data.
+     *
      * @param audioData the audio data as a byte array
      */
     public AudioFile(byte[] audioData) {
@@ -82,39 +91,6 @@ public class AudioFile {
                 // Stop audio
                 audioLine.drain();
                 audioLine.stop();
-
-            } catch (IOException e) {
-                System.err.println("Error playing audio: " + e.getMessage());
-            }
-        }).start();
-    }
-
-    /**
-     * Plays the audio data and removes it from the specified player after playback.
-     *
-     * @param player the {@code AudioPlayer} managing this audio
-     * @param id     the identifier of the audio in the player
-     */
-    public void play(AudioPlayer player, int id) {
-        if (audioLine == null) return;
-        new Thread(() -> {
-            try {
-                // Start audio line
-                audioLine.start();
-
-                // Play audio
-                byte[] allData = audioInputStream.readAllBytes();
-                audioLine.write(allData, 0, allData.length);
-
-                // Reset audio stream
-                audioInputStream.reset();
-
-                // Stop audio
-                audioLine.drain();
-                audioLine.stop();
-
-                // Remove audio from player
-                player.remove(id);
 
             } catch (IOException e) {
                 System.err.println("Error playing audio: " + e.getMessage());
