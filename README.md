@@ -1,25 +1,36 @@
-# Java Audio Library (JAL)
+# Java Audio Library
+[![](https://jitpack.io/v/MCmoderSD/JavaAudioLibrary.svg)](https://jitpack.io/#MCmoderSD/JavaAudioLibrary)
+
 
 ## Description
 A simple Java audio library for recording and playing audio files.
 
 The Library currently only supports .wav files with a sample rate up to 192kHz and up to 16-bit PCM and up to 2 channels (stereo).
 
+
 ## Usage
 
 ### Maven
+Make sure you have the JitPack repository added to your `pom.xml` file:
 ```xml
-<dependencies>
-    <dependency>
-        <groupId>de.MCmoderSD</groupId>
-        <artifactId>jal</artifactId>
-        <version>1.1.5</version>
-    </dependency>
-</dependencies>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+Add the dependency to your `pom.xml` file:
+```xml
+<dependency>
+    <groupId>com.github.MCmoderSD</groupId>
+    <artifactId>JavaAudioLibrary</artifactId>
+    <version>1.1.5</version>
+</dependency>
 ```
 
-## Usage Example
 
+## Usage Example
 ```java
 import de.MCmoderSD.JavaAudioLibrary.AudioFile;
 import de.MCmoderSD.JavaAudioLibrary.AudioLoader;
