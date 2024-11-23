@@ -25,7 +25,7 @@ Add the dependency to your `pom.xml` file:
 <dependency>
     <groupId>com.github.MCmoderSD</groupId>
     <artifactId>JavaAudioLibrary</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 
