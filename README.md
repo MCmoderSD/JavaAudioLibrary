@@ -1,6 +1,4 @@
 # Java Audio Library
-[![](https://jitpack.io/v/MCmoderSD/JavaAudioLibrary.svg)](https://jitpack.io/#MCmoderSD/JavaAudioLibrary)
-
 
 ## Description
 A simple Java audio library for recording and playing audio files.
@@ -11,21 +9,22 @@ The Library currently only supports .wav files with a sample rate up to 192kHz a
 ## Usage
 
 ### Maven
-Make sure you have the JitPack repository added to your `pom.xml` file:
+Make sure you have my Sonatype Nexus OSS repository added to your `pom.xml` file:
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <id>Nexus</id>
+        <name>Sonatype Nexus</name>
+        <url>https://mcmodersd.de/nexus/repository/maven-releases/</url>
     </repository>
 </repositories>
 ```
 Add the dependency to your `pom.xml` file:
 ```xml
 <dependency>
-    <groupId>com.github.MCmoderSD</groupId>
+    <groupId>de.MCmoderSD</groupId>
     <artifactId>JavaAudioLibrary</artifactId>
-    <version>1.1.6</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 

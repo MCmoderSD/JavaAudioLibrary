@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.MCmoderSD</groupId>
-    <artifactId>jal</artifactId>
-    <version>1.1.6</version>
+    <artifactId>JavaAudioLibrary</artifactId>
+    <version>1.2.0</version>
 
     <name>Java Audio Library</name>
     <description>A simple Java audio library</description>
 
     <distributionManagement>
         <repository>
-            <id>JavaAudioLibrary</id>
-            <name>GitHub MCmoderSD Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/MCmoderSD/JavaAudioLibrary</url>
+            <id>Nexus</id>
+            <name>Sonatype Nexus</name>
+            <url>https://mcmodersd.de/nexus/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
@@ -27,16 +27,17 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>Nexus</id>
+            <name>Sonatype Nexus</name>
+            <url>https://mcmodersd.de/nexus/repository/maven-releases/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.MCmoderSD</groupId>
-            <artifactId>ExecutorUtility</artifactId>
-            <version>1.0.2</version>
+            <groupId>de.MCmoderSD</groupId>
+            <artifactId>Executor</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 
